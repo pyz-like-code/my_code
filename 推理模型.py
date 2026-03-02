@@ -6,6 +6,9 @@ import torch
 import torch.nn as nn
 from torchvision import datasets, transforms
 import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
+
+font = fm.FontProperties(fname=None, family="Microsoft YaHei", size=12)
 
 # ===================== 1. NPU 环境配置（关键！优先调用锐龙NPU） =====================
 
@@ -143,15 +146,15 @@ def visualize_prediction():
         predicted = np.argmax(output, axis=1)
         
         # 绘制前5张
-        fig, axes = plt.subplots(1, 5, figsize=(10, 3))
-        for i in range(5):
+        fig, axes = plt.subplots(1, 10, figsize=(10, 3))
+        for i in range(10):
             ax = axes[i]
             img_np = data[i].cpu().squeeze().numpy()
             ax.imshow(img_np, cmap='gray')
-            ax.set_title(f'NPU预测: {predicted[i]}\n真实: {target[i].item()}')
+            ax.set_title(f'NPU预测: {predicted[i]}\n实际: {target[i].item()}', fontproperties=font)
             ax.axis('off')
         
-        plt.suptitle(f"锐龙NPU推理结果（执行器：{npu_sess.get_providers()[0]}）", fontsize=12)
+        plt.suptitle(f"锐龙NPU推理结果（执行器：{npu_sess.get_providers()[0]}）", fontsize=12, fontproperties=font)
         plt.tight_layout()
         plt.show()
     except Exception as e:
